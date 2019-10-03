@@ -1,12 +1,15 @@
-
+#Frederick Herzog
+#HashCalc
 from PyQt5 import QtCore, QtGui, QtWidgets
 import hashes
+import hashlib
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(468, 521)
         MainWindow.setWindowOpacity(0.9)
+        MainWindow.setWindowIcon(QtGui.QIcon('icons/alg.png'))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
@@ -14,13 +17,13 @@ class Ui_MainWindow(object):
         self.MainLabel = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
         font.setFamily("Vivaldi")
-        font.setPointSize(52)
+        font.setPointSize(60)
         font.setItalic(True)
         self.MainLabel.setFont(font)
         self.MainLabel.setObjectName("MainLabel")
         self.gridLayout.addWidget(self.MainLabel, 0, 0, 1, 2)
         self.mainIcon = QtWidgets.QLabel(self.centralwidget)
-        self.mainIcon.setMaximumSize(QtCore.QSize(100, 50))
+        self.mainIcon.setMaximumSize(QtCore.QSize(60, 50))
         self.mainIcon.setText("")
         self.mainIcon.setPixmap(QtGui.QPixmap("icons/alg.png"))
         self.mainIcon.setScaledContents(True)
@@ -37,6 +40,7 @@ class Ui_MainWindow(object):
         icon.addPixmap(QtGui.QPixmap("icons/lock.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.encButton.setIcon(icon)
         self.encButton.setObjectName("encButton")
+        self.encButton.clicked.connect(self.popup2)
         self.gridLayout.addWidget(self.encButton, 1, 2, 1, 1)
         self.exitButton = QtWidgets.QPushButton(self.centralwidget)
         font = QtGui.QFont()
@@ -67,7 +71,7 @@ class Ui_MainWindow(object):
         self.CalculateButton.setFont(font)
         self.CalculateButton.setCursor(QtGui.QCursor(QtCore.Qt.CrossCursor))
         self.CalculateButton.setObjectName("CalculateButton")
-        self.CalculateButton.clicked.connect(self.calculate)
+        self.CalculateButton.clicked.connect(self.populate)
         self.gridLayout.addWidget(self.CalculateButton, 4, 2, 1, 1)
         self.fileLineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.fileLineEdit.setObjectName("fileLineEdit")
@@ -147,62 +151,10 @@ class Ui_MainWindow(object):
         self.sha512entry = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
         self.sha512entry.setObjectName("sha512entry")
         self.formLayout.setWidget(5, QtWidgets.QFormLayout.FieldRole, self.sha512entry)
-        self.ripemdLabel = QtWidgets.QLabel(self.scrollAreaWidgetContents)
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.ripemdLabel.setFont(font)
-        self.ripemdLabel.setObjectName("ripemdLabel")
-        self.formLayout.setWidget(7, QtWidgets.QFormLayout.LabelRole, self.ripemdLabel)
-        self.ripemdentry = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
-        self.ripemdentry.setObjectName("ripemdentry")
-        self.formLayout.setWidget(7, QtWidgets.QFormLayout.FieldRole, self.ripemdentry)
-        self.whirlpoolLabel = QtWidgets.QLabel(self.scrollAreaWidgetContents)
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.whirlpoolLabel.setFont(font)
-        self.whirlpoolLabel.setObjectName("whirlpoolLabel")
-        self.formLayout.setWidget(8, QtWidgets.QFormLayout.LabelRole, self.whirlpoolLabel)
-        self.whirlpoolEntry = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
-        self.whirlpoolEntry.setObjectName("whirlpoolEntry")
-        self.formLayout.setWidget(8, QtWidgets.QFormLayout.FieldRole, self.whirlpoolEntry)
-        self.shake128Label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.shake128Label.setFont(font)
-        self.shake128Label.setObjectName("shake128Label")
-        self.formLayout.setWidget(9, QtWidgets.QFormLayout.LabelRole, self.shake128Label)
-        self.shake128entry = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
-        self.shake128entry.setObjectName("shake128entry")
-        self.formLayout.setWidget(9, QtWidgets.QFormLayout.FieldRole, self.shake128entry)
-        self.sm3Label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.sm3Label.setFont(font)
-        self.sm3Label.setObjectName("sm3Label")
-        self.formLayout.setWidget(10, QtWidgets.QFormLayout.LabelRole, self.sm3Label)
-        self.sm3Entry = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
-        self.sm3Entry.setObjectName("sm3Entry")
-        self.formLayout.setWidget(10, QtWidgets.QFormLayout.FieldRole, self.sm3Entry)
-        self.mdc2Label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.mdc2Label.setFont(font)
-        self.mdc2Label.setObjectName("mdc2Label")
-        self.formLayout.setWidget(12, QtWidgets.QFormLayout.LabelRole, self.mdc2Label)
-        self.mdc2Entry = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
-        self.mdc2Entry.setObjectName("mdc2Entry")
-        self.formLayout.setWidget(12, QtWidgets.QFormLayout.FieldRole, self.mdc2Entry)
         spacerItem = QtWidgets.QSpacerItem(20, 60, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.formLayout.setItem(14, QtWidgets.QFormLayout.FieldRole, spacerItem)
-        self.hexLabel = QtWidgets.QLabel(self.scrollAreaWidgetContents)
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.hexLabel.setFont(font)
-        self.hexLabel.setObjectName("hexLabel")
-        self.formLayout.setWidget(15, QtWidgets.QFormLayout.LabelRole, self.hexLabel)
-        self.hexentry = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
-        self.hexentry.setObjectName("hexentry")
-        self.formLayout.setWidget(15, QtWidgets.QFormLayout.FieldRole, self.hexentry)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout.addWidget(self.scrollArea, 8, 0, 1, 3)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -215,7 +167,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "HashCalc"))
         self.MainLabel.setText(_translate("MainWindow", "HashCalc"))
         self.encButton.setText(_translate("MainWindow", "Encryption Tool"))
         self.exitButton.setText(_translate("MainWindow", "Exit"))
@@ -229,48 +181,81 @@ class Ui_MainWindow(object):
         self.Sha256Label.setText(_translate("MainWindow", "sha256"))
         self.sha384Label.setText(_translate("MainWindow", "sha384"))
         self.sha512Label.setText(_translate("MainWindow", "sha512"))
-        self.ripemdLabel.setText(_translate("MainWindow", "ripemd160"))
-        self.whirlpoolLabel.setText(_translate("MainWindow", "whirlpool"))
-        self.shake128Label.setText(_translate("MainWindow", "shake128"))
-        self.sm3Label.setText(_translate("MainWindow", "sm3"))
-        self.mdc2Label.setText(_translate("MainWindow", "mdc2"))
-        self.hexLabel.setText(_translate("MainWindow", "Hex"))
 
-
-    def calculate(self):
+    def populate(self):
         try:
-            my_string = self.textEdit.toPlainText()
-
-            if my_string == '':
-                my_string = self.filename[0]
-                with open(my_string, 'r') as f:
-                	l = f.read()
-                my_string = l 
-                print(my_string)
-    
-            self.md5entry.setText(hashes.md5(my_string))
-            self.sha1entry.setText(hashes.sha1(my_string))
-            self.sha224entry.setText(hashes.sha224(my_string))
-            self.sha256entry.setText(hashes.sha256(my_string))
-            self.sha384entry.setText(hashes.sha384(my_string))
-            self.sha512entry.setText(hashes.sha512(my_string))
-            self.shake128entry.setText(hashes.shake128(my_string))
-           
-            utf = my_string.encode('utf-8')
-            hexa = utf.hex()
-            self.hexentry.setText(hexa)
-            
+            textEntry = self.textEdit.toPlainText()
+            if textEntry.isalnum():
+                self.hash2Text(textEntry)
+                self.clearEntries()
+            else:
+                myfile = self.filename[0]
+                self.hashFile(myfile)
+                self.clearEntries()
         except:
-           	print("ERROR")
-   
+            self.popup()
+            self.clearEntries()
+       
+    def hash2Text(self, tohash):
+        self.md5entry.setText(hashes.md5(tohash).upper())
+        self.sha1entry.setText(hashes.sha1(tohash).upper())
+        self.sha224entry.setText(hashes.sha224(tohash).upper())
+        self.sha256entry.setText(hashes.sha256(tohash).upper())
+        self.sha384entry.setText(hashes.sha384(tohash).upper())
+        self.sha512entry.setText(hashes.sha512(tohash).upper())
+
+    def clearEntries(self):
+        self.textEdit.setText('')
+        self.fileLineEdit.setText('')
+        self.filename = '' 
+
+    def hashFile(self, file):
+        md5 = hashlib.md5()
+        sha1 = hashlib.sha1()
+        sha224 = hashlib.sha224()
+        sha256 = hashlib.sha256()
+        sha384 = hashlib.sha384()
+        sha512 = hashlib.sha512()
+        with open (file, 'rb') as f:
+            chunk = 0
+            while chunk != b'':
+                chunk = f.read(1024)
+                md5.update(chunk)
+                sha1.update(chunk)
+                sha224.update(chunk)
+                sha256.update(chunk)
+                sha384.update(chunk)
+                sha512.update(chunk)
+        self.md5entry.setText(md5.hexdigest().upper())
+        self.sha1entry.setText(sha1.hexdigest().upper())
+        self.sha224entry.setText(sha224.hexdigest().upper())
+        self.sha256entry.setText(sha256.hexdigest().upper())
+        self.sha384entry.setText(sha384.hexdigest().upper())
+        self.sha512entry.setText(sha512.hexdigest().upper())
+
     def file_dialogue(self):
         self.filename = QtWidgets.QFileDialog.getOpenFileName()
-        print(self.filename[0])
         self.fileLineEdit.setText(self.filename[0])
 
     def quit(self):
         MainWindow.destroy()
 
+    def popup(self):
+        msg = QtWidgets.QMessageBox()
+        msg.setWindowTitle("Error")
+        msg.setWindowIcon(QtGui.QIcon('icons/alg.png'))
+        msg.setText("You must first enter a string or a file.")
+        msg.setIcon(QtWidgets.QMessageBox.Question)
+        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        x = msg.exec_()
+
+    def popup2(self):
+        msg = QtWidgets.QMessageBox()
+       	msg.setWindowTitle("Crypto-Tools")
+       	msg.setWindowIcon(QtGui.QIcon('icons/alg.png'))
+        msg.setText("Be Patient. Cryptography tools are coming soon!")
+        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        x = msg.exec_()
 
 if __name__ == "__main__":
     import sys
@@ -280,3 +265,5 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+
+
